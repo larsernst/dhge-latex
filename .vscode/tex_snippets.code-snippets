@@ -6,22 +6,22 @@
 
         "description": "Insert \\dhgefigure" // beschreibung
     },
-    "Abkürzung": {
-        "prefix": ["abk", "dhgeabk"], // auf welchem namen der snippet auffindbar ist
+    "Glossar-Eintrag (Fachbegriff)": {
+        "prefix": ["glossar", "dhgeglossar"], // auf welchem namen der snippet auffindbar ist
         "scope": "latex,tex", // welche files der snippet betreffen soll
-        "body": ["\\DeclareAcronym{${1:ac-used-name}}{",
-                "   short = {${2:abk}},",
-                "   long = {${3:non_abk}}",
+        "body": ["\\newglossaryentry{${1:id}}{",
+                "   name = {${2:Begriff}},",
+                "   description = {${3:Beschreibung}}",
                 "}"
         ], // einzufügender snippet
-        "description": "Insert \\DeclareAcronym" // beschreibung
+        "description": "Insert \\newglossaryentry" // beschreibung
     },
-    "Abkürzung - singleline": {
-        "prefix": ["singleabk", "singledhgeabk"], // auf welchem namen der snippet auffindbar ist
+    "Glossar-Eintrag (Abkürzung)": {
+        "prefix": ["abk", "dhgeabk", "glossarabk"], // auf welchem namen der snippet auffindbar ist
         "scope": "latex,tex", // welche files der snippet betreffen soll
-        "body": ["\\DeclareAcronym{${1:ac-used-name}}{short = {${2:abk}}, long = {${3:non_abk}}}"
+        "body": ["\\newacronym[description={${4:Erläuterung}}]{${1:id}}{${2:ABK}}{${3:ausgeschrieben}}"
         ], // einzufügender snippet
-        "description": "Insert singleline \\DeclareAcronym" // beschreibung
+        "description": "Insert \\newacronym" // beschreibung
     },
     // Im 'body' könne parameter verwendet werden, um bestimmte Ziele zu erreichen. (z.B. tabbing)
     // Nummern entsprechen Reihenfolge

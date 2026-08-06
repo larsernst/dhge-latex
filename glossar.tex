@@ -1,0 +1,28 @@
+% Definieren Sie hier Ihre Glossar-Einträge anhand der DHGE Beispiele.
+% Diese Datei wird nur verwendet, wenn in der config.tex CGLOSSAR auf 1 steht
+% (Voreinstellung). Bei CGLOSSAR=0 gilt stattdessen abk.tex (acro-Paket).
+% Das Glossar ersetzt das Abkürzungsverzeichnis: Es enthält alle Fachbegriffe
+% UND Abkürzungen, deren Bedeutung nicht für jeden Leser klar und eindeutig ist
+% (auch firmeninterne Begriffe!).
+% Das Glossar wird automatisch alphabetisch sortiert und mit "Hanging Indent"
+% (Fachbegriff fett) formatiert.
+%
+% Fachbegriff:
+%   \newglossaryentry{id}{
+%       name = {Begriff},
+%       description = {Erläuterung in einem (kurzen) Absatz},
+%   }
+%
+% Abkürzung:
+%   \newacronym[description = {Erläuterung}]{id}{ABK}{ausgeschrieben}
+%
+% Im Text verwenden Sie dann einfach \gls{id} (bzw. \ac{id}).
+% LaTeX kümmert sich um den Rest.
+
+\newglossaryentry{latex}{
+    name = {LaTeX},
+    description = {Ein Textsatzsystem zur Erstellung wissenschaftlicher Dokumente auf Basis des Satzprogramms \TeX. In diesem Template werden alle Formatierungen über LaTeX-Befehle vorgenommen.},
+}
+
+\newacronym[description = {Die Duale Hochschule Gera-Eisenach (DHGE) ist eine staatliche Hochschule des Freistaats Thüringen mit Standorten in Gera und Eisenach, an der duale Studiengänge in Kooperation mit Praxispartnern angeboten werden.}]
+{dhge}{DHGE}{Duale Hochschule Gera-Eisenach}

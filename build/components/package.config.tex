@@ -4,8 +4,8 @@
 \usepackage[hyperfootnotes = false, hidelinks]{hyperref}
 \usepackage{amssymb}
 \usepackage{fancyhdr}
-\usepackage[version = 3]{acro}
 \usepackage{enumitem}
+\usepackage{ragged2e}
 \usepackage[style=german]{csquotes}
 \usepackage[backend=biber,
             style        = alphabetic,
@@ -16,6 +16,18 @@
             minalphanames= 3]{biblatex}
 \usepackage[ngerman]{babel}
 \usepackage{footmisc}
+% Glossar (CGLOSSAR=1) bzw. klassisches Abkürzungsverzeichnis (CGLOSSAR=0)
+% glossaries muss nach hyperref und babel geladen werden
+\if\CGLOSSAR 1
+    \usepackage[%
+        nonumberlist,%
+        nopostdot,%
+        nogroupskip,%
+        toc=false%
+    ]{glossaries}
+\else
+    \usepackage[version = 3]{acro}
+\fi
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{xparse}

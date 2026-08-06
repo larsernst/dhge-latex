@@ -63,6 +63,25 @@
 \if\CKUSCHE 1
     \counterwithin{figure}{section}
     \counterwithin{table}{section}
+
+    % Anhänge werden mit Großbuchstaben A, B, C, ... nummeriert
+    % und wie normale Hauptkapitel im Inhaltsverzeichnis gelistet.
+    % Abbildungen/Tabellen in den Anhängen heißen dann A.1, A.2, B.1 usw.
+    % Verwendung in anlagen.tex:
+    %   \anhang{Titel von Anhang A}
+    %   ... Abbildungen/Tabellen ...
+    %   \anhang{Titel von Anhang B}
+    \newcounter{anhang}
+    \newcommand{\anhang}[1]{%
+        \stepcounter{anhang}%
+        \setcounter{figure}{0}%
+        \setcounter{table}{0}%
+        \renewcommand{\thefigure}{\Alph{anhang}.\arabic{figure}}%
+        \renewcommand{\thetable}{\Alph{anhang}.\arabic{table}}%
+        \phantomsection
+        \section*{Anhang \Alph{anhang}: #1}%
+        \addcontentsline{toc}{section}{\protect\numberline{\Alph{anhang}}#1}%
+    }
 \fi
 
 
@@ -78,6 +97,11 @@
 
 % CITATION SETUP
 \renewcommand*{\labelalphaothers}{\textsuperscript{}}
+
+% Literaturverzeichnis: Hanging Indent (Standard von biblatex), Flattersatz
+% (verhindert unschöne Wort-Zwischenräume und Umbruch mitten in URLs)
+\AtBeginBibliography{\RaggedRight}
+\setlength{\emergencystretch}{3em}
 
 
 % HEADERS & FOOTERS
@@ -97,6 +121,9 @@
 
 % FOOTNOTE SETUP
 \renewcommand{\footnotelayout}{\hspace{0.5em}}
+
+% Fußnoten: Schrift 1 pt kleiner als Fließtext (12 pt -> 11 pt), einfacher Zeilenabstand
+\renewcommand{\footnotesize}{\fontsize{11}{13.6}\selectfont}
 
 % COUNTER
 % Zweck: in römischen Zahlen weiter zählen, nachdem der Counter von arabisch zurück geändert wird
@@ -213,43 +240,63 @@
 \makeatother
 
 
-% ACRO SETUP
-\acsetup{
-    list/heading = section*,
-    list/name = {Abkürzungsverzeichnis},
-    list/template = description,
-    make-links = true,
-    link-only-first = false
-}
+% GLOSSAR / ABKÜRZUNGSVERZEICHNIS SETUP
+% CGLOSSAR=1: Glossar (Fachbegriffe + Abkürzungen, alphabetisch sortiert,
+% "Hanging Indent", Fachbegriff fett) anstelle des Abkürzungsverzeichnisses.
+% Fachbegriffe werden mit \newglossaryentry{...}{...} und Abkürzungen mit
+% \newacronym{...}{...}{...} in glossar.tex definiert.
+% Im Text werden sie mit \gls{...} aufgerufen (bzw. \ac{...}).
+% CGLOSSAR=0: klassisches Abkürzungsverzeichnis via acro-Paket (abk.tex).
+\if\CGLOSSAR 1
+    % Formatierung: Hanging Indent + Fachbegriff fett
+    \setglossarystyle{list}
+    \renewcommand*{\glsnamefont}[1]{\textbf{#1}}
 
-% Standard Abkürzungsverzeichnis überschreiben -> einheitliche Einrückung
-\RenewAcroTemplate[list]{description}{%
-    \acronymsmapT{%
-        \AcroAddRow{%
-            \textbf{\acrowrite{short}}%
-            &
-            \acrowrite{long}%
-            \acropages
-            {\acrotranslate{page}\nobreakspace}%
-            {\acrotranslate{pages}\nobreakspace}%
-            \vspace{10pt}
-            \tabularnewline
+    % Kompatibilität zum bisherigen \ac-Befehl des acro-Pakets:
+    % \ac{id} entspricht \gls{id} (erste Nutzung: lang (KURZ), danach KURZ)
+    \let\ac\gls
+    \let\acp\glspl
+
+    \makeglossaries
+\else
+    % ACRO SETUP
+    \acsetup{
+        list/heading = section*,
+        list/name = {Abkürzungsverzeichnis},
+        list/template = description,
+        make-links = true,
+        link-only-first = false
+    }
+
+    % Standard Abkürzungsverzeichnis überschreiben -> einheitliche Einrückung
+    \RenewAcroTemplate[list]{description}{%
+        \acronymsmapT{%
+            \AcroAddRow{%
+                \textbf{\acrowrite{short}}%
+                &
+                \acrowrite{long}%
+                \acropages
+                {\acrotranslate{page}\nobreakspace}%
+                {\acrotranslate{pages}\nobreakspace}%
+                \vspace{10pt}
+                \tabularnewline
+            }%
         }%
-    }%
-    \acroheading
-    \acropreamble
-    \noindent
-    \begin{tabular}{@{}ll}
-        \AcronymTable
-    \end{tabular}
-}
+        \acroheading
+        \acropreamble
+        \noindent
+        \begin{tabular}{@{}ll}
+            \AcronymTable
+        \end{tabular}
+    }
 
-% AUTO REMOVE/INSERT Abkürzungsverzeichnis
-% Abkürzungsverzeichnis überschreibt \UseAcroTemplate für \ac
-% New Counter to count used acronyms:
-\newtotcounter{acro_num}
-\def\oldUseAcroTemplate{} \let\oldUseAcroTemplate=\UseAcroTemplate
-\def\UseAcroTemplate{\stepcounter{acro_num}\oldUseAcroTemplate}
+    % AUTO REMOVE/INSERT Abkürzungsverzeichnis
+    % Abkürzungsverzeichnis überschreibt \UseAcroTemplate für \ac
+    % New Counter to count used acronyms:
+    \newtotcounter{acro_num}
+    \def\oldUseAcroTemplate{} \let\oldUseAcroTemplate=\UseAcroTemplate
+    \def\UseAcroTemplate{\stepcounter{acro_num}\oldUseAcroTemplate}
+\fi
 
 
 % INDENTION SETUP

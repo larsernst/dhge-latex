@@ -18,9 +18,13 @@
 \input{components/setup.tex}
 % ab hier ist das Arbeitsverzeichnis das root Verzeichnis (gilt primär für \input)
 
-% Abkürzungen müssen früher eingefügt werden, da sie
-% nicht als Text, sondern als Variablen definiert werden
-\input{abk.tex}
+% Glossar-Einträge (CGLOSSAR=1) bzw. Abkürzungen (CGLOSSAR=0) müssen früher
+% eingefügt werden, da sie nicht als Text, sondern als Variablen definiert werden
+\if\CGLOSSAR 1
+    \input{glossar.tex}
+\else
+    \input{abk.tex}
+\fi
 
 
 % Konfiguration globaler Definitionen
@@ -56,8 +60,9 @@
     \fi
 
     % Lade Abstract abhängig von der Einstellung in config.tex
+    % abstract.tex enthält die deutsche Kurzfassung und das englische Abstract
+    % (jeweils 2 Absätze), beides hinter dem Deckblatt und vor dem Inhaltsverzeichnis
     \if\CHASABSTRACT 1
-        \section*{Abstract}
         \input{../abstract.tex}
         \newpage % Sections haben hier noch keinen automatischen Seitenumbruch
     \fi
@@ -65,10 +70,9 @@
     % INHALTSVERZEICHNIS
     \pagenumbering{Roman} \setcounter{page}{1}
     \tableofcontents{\fancyfoot{}}
-    \if\CKUSCHE 1 % im Kusche Mode erscheinen die Anlagen im InhaltsVZ
-        \phantomsection
-        \listofanlagen
-    \fi
+    % im Kusche-Mode erscheinen die Anhänge als normale Hauptkapitel
+    % (A, B, C, ...) am Ende des Inhaltsverzeichnisses, es gibt KEIN separates
+    % Anhangs-Verzeichnis (siehe \anhang in anlagen.tex)
     \cleardoublepage
 
     % ABBILDUNGSVERZEICHNIS
@@ -79,12 +83,16 @@
     \phantomsection
     \conditionalLoT
 
-    % ABKÜRZUNGSVERZEICHNIS
+    % ABKÜRZUNGSVERZEICHNIS (nur im klassischen Modus CGLOSSAR=0)
+    % im Glossar-Modus (CGLOSSAR=1) erscheint das Glossar hinter den Anhängen
+    % und vor dem Literaturverzeichnis (siehe weiter unten im Dokument)
     % wird nur dann generiert, wenn mindestens ein mal \ac oder ein verwandter Befehl aufgerufen wurde und damit nicht leer ist
-    \ifnum\totvalue{acro_num}>0
-        \printacronyms
-        \addcontentsline{toc}{section}{Abkürzungsverzeichnis}
-        \cleardoublepage
+    \if\CGLOSSAR 0
+        \ifnum\totvalue{acro_num}>0
+            \printacronyms
+            \addcontentsline{toc}{section}{Abkürzungsverzeichnis}
+            \cleardoublepage
+        \fi
     \fi
 
     \setcounter{savepage}{\arabic{page}}
@@ -117,7 +125,9 @@
     % erzeugt ein Anlagenkapitel und fügt es zum InhaltsVZ hinzu, insofern Anlagen existieren.
 
     % \listofanlagen generiert ein Anlagenverzeichnis
-    % im Kusche-Modus wird kein Anlagenverzeichnis erzeugt, aber Anlagen im Inhaltsverzeichnis geführt
+    % im Kusche-Modus wird kein separates Anlagenverzeichnis erzeugt: die Anhänge
+    % werden mit \anhang{...} als normale Hauptkapitel (A, B, C, ...) am Ende des
+    % Inhaltsverzeichnisses geführt
     \ifnum\totvalue{anlagenentries}>0
     \section*{Anlagen}
     \addcontentsline{toc}{section}{Anlagen}
@@ -129,19 +139,31 @@
     \fi
     \fi
 
+    % deaktiviere Kapitel in Fußzeile im Kusche Mode ab hier
     \if\CKUSCHE 1
-        % die Kapitel.lfd-Nummerierung wird im Kusche Mode ab hier wieder deaktiviert,
-        % da Anhänge mit Buchstaben nummeriert werden sollen (TODO: das funktioniert noch nicht, help wanted)
-        \counterwithout{figure}{section}
-        \counterwithout{table}{section}
-
-        % deaktiviere Kapitel in Fußzeile im Kusche Mode ab hier
         \fancyfoot      [L]{}
     \fi
 
-    \renewFigTabCap % Verhalten von Figure und Table Environments sowie \caption wird verändert (TODO: wie genau? LG, ZPM)
+    % Anlagen/Anhänge:
+    % im Kusche-Modus wird \renewFigTabCap nicht benötigt, die Abbildungen und
+    % Tabellen in den Anhängen werden über \anhang{...} (Anhang A, B, C, ...)
+    % automatisch zweistufig (A.1, A.2, B.1, ...) nummeriert
+    \if\CKUSCHE 0
+        \renewFigTabCap % Verhalten von Figure und Table Environments sowie \caption wird verändert (TODO: wie genau? LG, ZPM)
+    \fi
     \input{anlagen.tex}
     \cleardoublepage
+
+    % GLOSSAR (nur im Glossar-Modus CGLOSSAR=1)
+    % Das Glossar ersetzt das Abkürzungsverzeichnis und gehört
+    % hinter die Anhänge, aber vor das Literaturverzeichnis.
+    % Einträge werden in glossar.tex definiert.
+    \if\CGLOSSAR 1
+        \phantomsection
+        \printglossary[title=Glossar]
+        \addcontentsline{toc}{section}{Glossar}
+        \cleardoublepage
+    \fi
 
     % Im Kusche-Mode kommt das LiteraturVZ zuletzt
     \if\CKUSCHE 1

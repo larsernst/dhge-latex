@@ -26,7 +26,7 @@ Inoffizielles LaTeX-Template für Projektarbeiten für Technik-Studiengänge an 
 - [Abbildungen](#abbildungen)
   - [LaTeX Abbildungen](#latex-abbildungen)
   - [dhge-latex Abbildungen](#dhge-latex-abbildungen)
-- [Abkürzungen](#abkürzungen)
+- [Glossar](#glossar)
 - [Anlagenverzeichnis](#anlagenverzeichnis)
   - [Verwendung](#verwendung)
     - [Longfigure](#longfigure)
@@ -156,6 +156,24 @@ Die vorgestellte Font-Konfiguration basiert auf [diesem Stackoverflow Thread](ht
 Wer diese Fonts **nicht** verwenden möchte, kann in ``config.tex`` ``CFANCYFONTS`` auf ``0`` setzen, um den LaTex-Standard wiederherzustellen.
 
 # Zitate und Literaturverzeichnis
+
+> Nach den Hinweisen von Prof. Dr. Kusche werden Literaturverweise **inline** im Text angegeben, nicht in Fußnoten ausgelagert.
+
+## Inline-Zitat einfügen
+
+Dafür wird der `cite` Befehl genutzt. Dieser besitzt folgende Syntax:
+
+```latex
+\cite[Postnote]{literatur_id}
+```
+
+Beispiel:
+
+```latex
+... siehe \cite[S. 42]{mapi}
+```
+
+Der Zitatschlüssel (z.B. `[Mic13a]`) wird automatisch aus dem Schlüssel in `literatur.bib` gebildet und ist alphabetisch sortiert. Nur fortlaufende Nummern als Zitatschlüssel sind unerwünscht.
 
 ## Zitat als Fußnote einfügen
 
@@ -290,127 +308,91 @@ Beispiel:
 
 Der `dhgefigure` Befehl wird nun auch als Snippet für Visual-Studio-Code mitgeliefert.
 
-# Abkürzungen
+# Glossar
+
+> Ersetzt das Abkürzungsverzeichnis: Enthält alle Fachbegriffe **und** Abkürzungen, deren Bedeutung nicht für jeden Leser klar und eindeutig ist (auch firmeninterne Begriffe!). Jeder Eintrag wird mit einem (kurzen) Absatz Beschreibung versehen.
+> Das Glossar wird automatisch **alphabetisch sortiert**, mit **Hanging Indent** und **fett gedrucktem** Fachbegriff formatiert.
+> Es erscheint hinter den Anhängen, aber vor dem Literaturverzeichnis.
+
+> Wer statt des Glossars das klassische Abkürzungsverzeichnis (acro-Paket, Stand vor der Glossar-Umstellung) verwenden möchte, setzt in der `config.tex` den Schalter `CGLOSSAR` auf `0` und pflegt die Abkürzungen in `abk.tex` (siehe das dortige Beispiel). Das Abkürzungsverzeichnis erscheint dann vor dem Hauptteil hinter dem Tabellenverzeichnis. Mit `CGLOSSAR=1` (Voreinstellung) gilt das Glossar in `glossar.tex`.
+
+## Fachbegriff definieren
 
 ```latex
-\DeclareAcronym{1}{
-  short = {2},
-  long = {3}
-  }
-```
-
-1. ID der Abkürzung, damit wird im Fließtext später referenziert.
-2. Die Abkürzung selbst
-3. Der ausgeschriebene Begriff
-
-Beispielweise:
-
-```latex
-\DeclareAcronym{dhge}{
-  short = {DHGE},
-  long = {Duale Hochschule Gera-Eisenach}
+\newglossaryentry{1}{
+  name = {2},
+  description = {3}
 }
 ```
 
-Im Fließtext wird dann mit
-
-```latex
-\ac{dhge}
-```
-
-die Abkürzung aufgerufen.
-Dies sind die Pflicht-Argumente. Es gibt weitere Einstellungsmöglichkeiten bei dem Deklarieren von Abkürzungen, die in der unten stehenden Dokumentation nachgelesen werden können. Eine sinnvolle Auswahl davon:
-
-```latex
-\DeclareAcronym{1}{
-  short = {2},
-  long = {3},
-  short-plural = {4},
-  long-plural = {5},
-  alt = {8}
-  }
-```
-
-ODER
-
-```latex
-\DeclareAcronym{1}{
-  short = {2},
-  long = {3},
-  short-plural-form = {6},
-  long-plural-form = {7},
-  alt = {8}
-  }
-```
-
-1. ID der Abkürzung, damit wird im Fließtext später referenziert.
-2. Die Abkürzung selbst
-3. Der ausgeschriebene Begriff
-4. Buchstabe oder Silbe, die der Abkürzung im Plural angehangen wird
-5. Buchstabe oder Silbe, die dem ausgeschriebenen Wort im Plural angehangen wird
-6. Plural-Form der Abkürzung, ersetzt die Abkürzung komplett
-7. Plural-Form des Wortes, ersetzt das Wort komplett
-8. Alternative zum ausgeschriebenen Wort
-
-Die Angaben 4 bis 8 sind optional.
-
-Die Pluralform lässt sich mit
-
-```latex
-\acp{1}
-```
-
-aufrufen, die Alternativform mit
-
-```latex
-\aca{1}
-```
+1. ID des Begriffs, damit wird im Fließtext referenziert.
+2. Der Begriff selbst
+3. Die Erläuterung (ein kurzer Absatz)
 
 Beispiel:
 
 ```latex
-\DeclareAcronym{jpg}{
-  short = {JPEG},
-  long = {Joint Photographic Experts Group},
-  short-plural-form = {JPEGs},
-  long-plural-form = {Joint Photographic Experts Groups},
-  alt = {JPG}
-  }
+\newglossaryentry{latex}{
+  name = {LaTeX},
+  description = {Ein Textsatzsystem zur Erstellung wissenschaftlicher Dokumente auf Basis des Satzprogramms \TeX.}
+}
 ```
 
-ODER
+## Abkürzung definieren
 
 ```latex
-\DeclareAcronym{jpg}{
-  short = {JPEG},
-  long = {Joint Photographic Experts Group},
-  short-plural = {s},
-  long-plural = {s},
-  alt = {JPG}
-  }
+\newacronym[description={4}]{1}{2}{3}
 ```
 
-Aufruf:
+1. ID der Abkürzung, damit wird im Fließtext referenziert.
+2. Die Abkürzung selbst
+3. Der ausgeschriebene Begriff
+4. (Optional) Erläuterung, da bei den meisten Abkürzungen allein der ausgeschriebene Wortlaut ohne Erklärung nicht sinnvoll ist
+
+Beispiel:
 
 ```latex
-\ac{jpg} % Normale Form
-\acp{jpg} % Plural-Form
-\aca{jpg} % Alternativ-Form
+\newacronym[description={Die Duale Hochschule Gera-Eisenach ...}]{dhge}{DHGE}{Duale Hochschule Gera-Eisenach}
 ```
 
-Das Abkürzungsverzeichnis wird dann automatisch erstellt. Dabei ist zu beachten, dass unter Umständen bis zu vier Kompilierungen notwendig sind, wenn eine Abkürzung hinzugefügt oder entfernt wurde, damit das Verzeichnis korrekt erstellt wird.
+## Verwendung im Text
 
-***
+Im Fließtext wird der Eintrag mit
 
-Für das Erstellen von Abkürzungen wird nun auch ein Snippet für Visual-Studio-Code mitgeliefert: `abk` / `dhgeabk`.
+```latex
+\gls{latex}
+```
 
-Für mehr Informationen kann die [Acro Package Documentation](https://mirror.physik.tu-berlin.de/pub/CTAN/macros/latex/contrib/acro/acro-manual.pdf) gelesen werden.
+aufgerufen. Für Abkürzungen gilt: Bei der ersten Verwendung wird `lang (KURZ)` gedruckt, danach nur noch `KURZ`.
+Der bisherige Befehl `\ac{id}` aus dem acro-Paket funktioniert weiterhin (entspricht `\gls{id}`).
+
+## Kompilierung
+
+Für das Glossar ist ein zusätzlicher Verarbeitungsschritt nötig (`makeglossaries`).
+Wird das Projekt mit `latexmk` kompiliert (empfohlen, siehe [Setup](#setup)), kümmert sich die mitgelieferte `.latexmkrc` automatisch darum.
+Beim Hinzufügen/Entfernen von Einträgen sind unter Umständen mehrere Kompilierläufe nötig.
 
 # Anlagenverzeichnis
 
-> wird automatisch generiert
+> Im Kusche-Modus wird **kein separates Anhangs-Verzeichnis** erzeugt: Die Anhänge werden mit Großbuchstaben (A, B, C, ...) nummeriert und wie normale Hauptkapitel am Ende des Inhaltsverzeichnisses gelistet. Abbildungen und Tabellen in den Anhängen heißen dann A.1, A.2, B.1 usw.
 
-## Verwendung
+## Verwendung im Kusche-Modus
+
+Anhänge werden in der `anlagen.tex` mit dem Befehl `\anhang{Titel}` eingeleitet:
+
+```latex
+\anhang{Titel von Anhang A}
+% Abbildungen/Tabellen/Code-Listings zu Anhang A
+
+\anhang{Titel von Anhang B}
+% Abbildungen/Tabellen/Code-Listings zu Anhang B
+```
+
+Die Anhänge werden automatisch fortlaufend mit A, B, C, ... nummeriert (auch bei nur einem Anhang: er heißt dann eben "A").
+
+## Verwendung im Standard-Modus
+
+> wird automatisch generiert
 
 - Anlagen werden in der anlagen.tex hinterlegt.
   - hierbei ist zu beachten:
@@ -482,32 +464,36 @@ Eine Anleitung finden Sie in [diesem Artikel](https://www.overleaf.com/learn/lat
 # Kusche Mode
 
 Prof. Dr. Kusche stellt an Praxisarbeiten, die er betreut, andere Anforderungen als Prof. Dr. Dorendorf.
-Deshalb wurde der ``CKUSCHE``-Schalter in ``config.tex`` eingeführt: diesen auf ``1`` zu setzen überschreibt einige Standardverhalten vom Template:
+Deshalb wurde der ``CKUSCHE``-Schalter in ``config.tex`` eingeführt. Er ist die Voreinstellung des Templates und setzt die "Hinweise zu Praxis- und Bachelor-Arbeiten" von Prof. Dr. Kusche um:
 
-- es gibt ein Abstract
+- es gibt ein Abstract (deutsch und englisch)
 - das Abstract wird nicht im Inhaltsverzeichnis geführt
 - das Abstract erscheint vor dem Inhaltsverzeichnis
 - das Abstract hat keine Kapitelnummer
-- Abbildungen, Tabellen, usw. werden zweistufig ``hauptkapitel.lfd`` nummeriert, mit Ausnahme von Anlagen, welche laufend nummeriert werden
+- Abbildungen, Tabellen, usw. werden zweistufig ``hauptkapitel.lfd`` nummeriert, in den Anhängen entsprechend ``A.1``, ``A.2``, ``B.1``, ...
 - Kapitel steht links im Footer / Header, analog zur Seitenzahl
-- Seitenzahlen vor dem Hauptteil sind römisch, ansonsten arabisch
-- Serifen-Font 12pt (Times New Roman geht, ist aber "langweilig")
+- Seitenzahlen vor dem Hauptteil sind römisch, ansonsten durchgehend arabisch (auch in Anhängen und Literaturverzeichnis)
+- Serifen-Font 12pt
+- es gibt kein separates Anhangs-Verzeichnis: Anhänge werden mit Großbuchstaben (A, B, C, ...) nummeriert und wie normale Hauptkapitel im Inhaltsverzeichnis geführt
+- statt des Abkürzungsverzeichnisses gibt es ein Glossar (hinter den Anhängen, vor dem Literaturverzeichnis)
 - Literaturverzeichnis erscheint zuletzt
-- es gibt kein Anlagenverzeichnis, dafür werden Anlagen im Inhaltsverzeichnis gelistet
 
 ## Probleme im Kusche Mode
 
 Leider gibt es Anforderungen von Prof. Dr. Kusche, die bislang nicht umgesetzt werden konnten.
 Wir freuen uns natürlich sehr über Ideen, Fixes und Anregungen aus der Community.
 
-- aktuell ist es noch nicht möglich, Anlagen mit Buchstaben zu nummerieren
-  - das ist glücklicherweise keine zwingende Anforderung
-
 # Abstract
 
-Das Template kann optional ein Abstract vor dem Inhaltsverzeichnis generieren.
+Das Template generiert ein Abstract in deutscher und englischer Sprache vor dem Inhaltsverzeichnis (hinter dem Deckblatt).
 
-Um das zu aktivieren, muss in der ``config.tex`` der ``CHASABSTRACT``-Schalter auf ``1`` gesetzt werden.
+In der ``abstract.tex`` wird pro Sprache je 2 Absätze mit jeweils 5-10 Zeilen erwartet:
+1. Absatz: "inhaltliche Einordnung" (Themenbereich der Arbeit)
+2. Absatz: "eigene Leistung" (Neuwert bzw. Erkenntnis/Ergebnis der Arbeit)
+
+Das Abstract wird nicht im Inhaltsverzeichnis geführt.
+
+Um das Abstract zu deaktivieren, muss in der ``config.tex`` der ``CHASABSTRACT``-Schalter auf ``0`` gesetzt werden.
 
 # Absatztrenner
 
