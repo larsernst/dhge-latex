@@ -311,7 +311,7 @@ Der `dhgefigure` Befehl wird nun auch als Snippet für Visual-Studio-Code mitgel
 # Glossar
 
 > Ersetzt das Abkürzungsverzeichnis: Enthält alle Fachbegriffe **und** Abkürzungen, deren Bedeutung nicht für jeden Leser klar und eindeutig ist (auch firmeninterne Begriffe!). Jeder Eintrag wird mit einem (kurzen) Absatz Beschreibung versehen.
-> Das Glossar wird automatisch **alphabetisch sortiert**, mit **Hanging Indent** und **fett gedrucktem** Fachbegriff formatiert.
+> Das Glossar wird automatisch **alphabetisch sortiert** formatiert: Der **fett gedruckte** Fachbegriff steht auf einer eigenen Zeile, die Erläuterung als eingerückter Block darunter.
 > Es erscheint hinter den Anhängen, aber vor dem Literaturverzeichnis.
 
 > Wer statt des Glossars das klassische Abkürzungsverzeichnis (acro-Paket, Stand vor der Glossar-Umstellung) verwenden möchte, setzt in der `config.tex` den Schalter `CGLOSSAR` auf `0` und pflegt die Abkürzungen in `abk.tex` (siehe das dortige Beispiel). Das Abkürzungsverzeichnis erscheint dann vor dem Hauptteil hinter dem Tabellenverzeichnis. Mit `CGLOSSAR=1` (Voreinstellung) gilt das Glossar in `glossar.tex`.
@@ -371,6 +371,8 @@ Der bisherige Befehl `\ac{id}` aus dem acro-Paket funktioniert weiterhin (entspr
 Für das Glossar ist ein zusätzlicher Verarbeitungsschritt nötig (`makeglossaries`).
 Wird das Projekt mit `latexmk` kompiliert (empfohlen, siehe [Setup](#setup)), kümmert sich die mitgelieferte `.latexmkrc` automatisch darum.
 Beim Hinzufügen/Entfernen von Einträgen sind unter Umständen mehrere Kompilierläufe nötig.
+
+> **Hinweis für Overleaf:** Auch Overleaf verwendet `latexmk` und benötigt die `.latexmkrc` im **Projekt-Hauptverzeichnis**, damit `makeglossaries` automatisch läuft. Beim Hochladen des Projekts (z. B. als ZIP) darf die versteckte Datei `.latexmkrc` nicht fehlen – sonst bleibt das Glossar leer.
 
 # Anlagenverzeichnis
 

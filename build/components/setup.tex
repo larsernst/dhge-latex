@@ -242,15 +242,35 @@
 
 % GLOSSAR / ABKÜRZUNGSVERZEICHNIS SETUP
 % CGLOSSAR=1: Glossar (Fachbegriffe + Abkürzungen, alphabetisch sortiert,
-% "Hanging Indent", Fachbegriff fett) anstelle des Abkürzungsverzeichnisses.
+% Fachbegriff fett auf eigener Zeile, Erläuterung eingerückt darunter)
+% anstelle des Abkürzungsverzeichnisses.
 % Fachbegriffe werden mit \newglossaryentry{...}{...} und Abkürzungen mit
 % \newacronym{...}{...}{...} in glossar.tex definiert.
 % Im Text werden sie mit \gls{...} aufgerufen (bzw. \ac{...}).
 % CGLOSSAR=0: klassisches Abkürzungsverzeichnis via acro-Paket (abk.tex).
 \if\CGLOSSAR 1
-    % Formatierung: Hanging Indent + Fachbegriff fett
-    \setglossarystyle{list}
+    % Formatierung: Fachbegriff fett auf eigener Zeile, Erläuterung als
+    % eingerückter Block darunter. Flattersatz (\RaggedRight) verhindert
+    % unschöne Wort-Zwischenräume und komische Zeilenumbrüche.
     \renewcommand*{\glsnamefont}[1]{\textbf{#1}}
+    \newglossarystyle{dhge}{%
+        \setglossarystyle{list}%
+        \renewenvironment{theglossary}%
+            {\begin{description}[%
+                style = nextline,%
+                leftmargin = 1em,%
+                labelwidth = 0pt,%
+                labelsep = 0pt,%
+                itemsep = 6pt,%
+                parsep = 0pt%
+            ]}%
+            {\end{description}}%
+        \renewcommand{\glossentry}[2]{%
+            \item[\glstarget{##1}{\glossentryname{##1}}]%
+            \RaggedRight\glossentrydesc{##1}\glspostdescription}%
+        \renewcommand{\subglossentry}[3]{\glossentry{##1}{##3}}%
+    }
+    \setglossarystyle{dhge}
 
     % Kompatibilität zum bisherigen \ac-Befehl des acro-Pakets:
     % \ac{id} entspricht \gls{id} (erste Nutzung: lang (KURZ), danach KURZ)
