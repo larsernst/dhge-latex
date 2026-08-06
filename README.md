@@ -31,6 +31,7 @@ Inoffizielles LaTeX-Template für Projektarbeiten für Technik-Studiengänge an 
   - [Verwendung](#verwendung)
     - [Longfigure](#longfigure)
 - [Code mit Minted einfügen](#code-mit-minted-einfügen)
+- [Randnotizen mit todonotes](#randnotizen-mit-todonotes)
 - [Spezielle Abschnitte](#spezielle-abschnitte)
   - [SubSubSubSection](#subsubsubsection)
 - [Unicode Alphabete](#unicode-alphabete)
@@ -423,21 +424,18 @@ Das ist besonders für Code-Beispiele für den Anhang praktisch.
 
 # Code mit Minted einfügen
 
-**Hier eine kurze Anleitung für das Minted Package. Damit lässt sich Code mit Syntaxhervorhebung direkt in LaTeX einfügen.**
+**Mit dem Minted Package lässt sich Code mit Syntaxhervorhebung (via Pygments) direkt in LaTeX einfügen.**
 
-1. Python [hier](https://www.python.org/) herunterladen und installieren und **sicherstellen, dass Python zur Umgebung (PATH) hinzugefügt ist**
+1. In der `config.tex` den Schalter `CMINTED` auf `1` setzen (lädt `minted` automatisch an der richtigen Stelle in der Ladereihenfolge vor `csquotes`)
+2. Das Python-Backend `latexminted` muss auf dem Build-System verfügbar sein:
+   - **Eigene Overleaf-Instanz (ernst.casa):** bereits installiert (bzw. nach Container-Recreation via `/root/overleaf/fix-texlive.sh`)
+   - **Lokal:** Python installieren, dann `pip install latexminted` (Pygments wird mitinstalliert); kein `--shell-escape`-Flag nötig, da `latexminted` im Restricted-Modus erlaubt ist
+   - **overleaf.com:** funktioniert out-of-the-box
+3. [Minted Kurz-Anleitung](https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted) oder [Minted Documentation](https://ctan.mc1.root.project-creative.net/macros/latex/contrib/minted/minted.pdf) lesen
 
-![Python PATH](assets/readme/python-path.png)
+# Randnotizen mit todonotes
 
-2. Pygments installieren (`pip install Pygments`)
-3. `\usepackage {minted}` in `build/package.config.tex` hinzufügen
-4. `--shell-escape` flag im Compiler-Aufruf setzen
-5. [Minted Kurz-Anleitung](https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted) oder [Minted Documentation](https://ctan.mc1.root.project-creative.net/macros/latex/contrib/minted/minted.pdf) lesen
-
-***
-
-Bei Proxy-Problemen mit pip, kann auch das `Pygments.whl` file runtergeladen und dann mit pip installiert werden.
-[Pygments Download](https://pypi.org/project/Pygments/#files)
+In der `config.tex` den Schalter `CTODONOTES` auf `1` setzen. Das lädt das `todonotes`-Paket und setzt `\marginparwidth` auf 2 cm, damit Randnotizen in die schmalen DHGE-Ränder passen. Verwendung: `\todo{Notiz}` (bzw. `\todo[inline]{Notiz}`).
 
 # Spezielle Abschnitte
 

@@ -55,3 +55,13 @@
 
 % 1 setzt Absatztrenner auf Einrückungen, 0 auf vertikale Abstände
 \def\CEINR          {0}
+
+% 1 lädt das minted-Paket (Syntax-Highlighting für Code-Umgebungen)
+% Hinweis: benötigt auf dem Build-System das Python-Backend "latexminted"
+% (auf der eigenen Overleaf-Instanz via fix-texlive.sh installiert)
+\def\CMINTED        {0}
+
+% 1 lädt das todonotes-Paket (Randnotizen mit \todo{...})
+% Hinweis: setzt \marginparwidth auf 2cm, damit Notizen in die schmalen
+% DHGE-Ränder passen
+\def\CTODONOTES     {0}

@@ -6,6 +6,12 @@
 \usepackage{fancyhdr}
 \usepackage{enumitem}
 \usepackage{ragged2e}
+% minted (CMINTED=1) muss VOR csquotes geladen werden, sonst warnen
+% fvextra ("csquotes should be loaded after fvextra") und lineno
+% ("Command \@parboxrestore has changed")
+\if\CMINTED 1
+    \usepackage{minted}
+\fi
 \usepackage[style=german]{csquotes}
 \usepackage[backend=biber,
             style        = alphabetic,
@@ -36,6 +42,13 @@
 \usepackage{totcount}
 \usepackage{chngcntr}
 \usepackage{icomma} % korrekte Darstellung von Kommas in Formeln
+
+% todonotes (CTODONOTES=1): \marginparwidth muss vor dem Laden auf 2cm
+% gesetzt werden, sonst warnt todonotes wegen der schmalen DHGE-Ränder
+\if\CTODONOTES 1
+    \setlength{\marginparwidth}{2cm}
+    \usepackage{todonotes}
+\fi
 
 % schönere Fonts, aber optional. Zum deaktivieren CFANCYFONTS in config.tex auf 0 setzen
 \if\CFANCYFONTS 1
